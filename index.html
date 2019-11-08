@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.25, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style type="text/css">
@@ -40,6 +36,63 @@
             font-family: Arial;
             /* border: 1px solid black; */
         }
+        
+        #up, #down, #left, #right, #a, #b {
+            font-size: 50px;
+            font-family: Arial;
+            background: white;
+            border: 1px solid black;
+        }
+        #up:active, #down:active, #left:active, #right:active, #a:active, #b:active {
+            font-size: 50px;
+            font-family: Arial;
+            background: white;
+            border: 1px solid black;
+        }
+        #up {
+            position: fixed;
+            top: 1000px;
+            left: 200px;
+            width: 150px;
+            height: 150px;
+
+        }
+        #down {
+            position: fixed;
+            top: 1250px;
+            left: 200px;
+            width: 150px;
+            height: 150px;
+        }
+        #left {
+            position: fixed;
+            top: 1125px;
+            left: 50px;
+            width: 150px;
+            height: 150px;   
+        }
+        #right {
+            position: fixed;
+            top: 1125px;
+            left: 350px;
+            width: 150px;
+            height: 150px;   
+        }
+        #a {
+            position: fixed;
+            top: 1125px;
+            left: 700px;
+            width: 150px;
+            height: 150px;  
+        }
+        #b {
+            position: fixed;
+            top: 1125px;
+            left: 925px;
+            width: 150px;
+            height: 150px;  
+        }
+
     </style>
 </head>
 <body>
@@ -52,6 +105,14 @@
     <div class="bottom-container">
         <button id="join" onclick="join();">Join</button>
         <button id="leave" onclick="location=location">Leave</button>
+    </div>
+    <div class="control-container">
+        <button id="up">up</button>
+        <button id="left">left</button>
+        <button id="down">down</button>
+        <button id="right">right</button>
+        <button id="a">a</button>
+        <!-- <button id="b">b</button> -->
     </div>
 
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
@@ -138,7 +199,50 @@
                         break;
                 }
             }
+            var upBtn = document.getElementById('up');
+            upBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                socket.emit('keyPress', {input: 'up', state:true})
+            })
+            upBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                socket.emit('keyPress', {input: 'up', state:false})
+            })
 
+            var downBtn = document.getElementById('down');
+            downBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                socket.emit('keyPress', {input: 'down', state:true})
+            })
+            downBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                socket.emit('keyPress', {input: 'down', state:false})
+            })
+
+            var leftBtn = document.getElementById('left');
+            leftBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                socket.emit('keyPress', {input: 'left', state:true})
+            })
+            leftBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                socket.emit('keyPress', {input: 'left', state:false})
+            })
+
+            var rightBtn = document.getElementById('right');
+            rightBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                socket.emit('keyPress', {input: 'right', state:true})
+            })
+            rightBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                socket.emit('keyPress', {input: 'right', state:false})
+            })
+            var a = document.getElementById('a');
+            a.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                socket.emit('keyPress', {input: 'space'})
+            })
     </script>
 </body>
 </html>
