@@ -5,10 +5,10 @@ var app = express();
 var PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use("index.html", express.static(__dirname + "index.html"));
+app.use("/public", express.static(__dirname + "/public"));
 
 app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
 var serv = require('http').createServer(app);
@@ -104,7 +104,7 @@ function Player(x, y, w, h, c, speed, id) {
                 }
             }
             if(this.down) {
-                if(this.y < 450) {
+                if(this.y < 900) {
                     this.y += this.speed;
                 }
             }
@@ -307,6 +307,72 @@ io.sockets.on('connection', function(socket) {
               }
         }
     })
+    socket.on('keyTap', function(data) {
+        if(players[socket.id] !== undefined) {
+            switch(data.input) {
+                case 'up':
+                    players[socket.id].up = data.up;
+                    players[socket.id].left = data.left;
+                    players[socket.id].right = data.right;
+                    players[socket.id].down = data.down;
+                  break;
+                case 'left':
+                    players[socket.id].up = data.up;
+                    players[socket.id].left = data.left;
+                    players[socket.id].right = data.right;
+                    players[socket.id].down = data.down;    
+                  break;
+                case 'right':
+                    players[socket.id].up = data.up;
+                    players[socket.id].left = data.left;
+                    players[socket.id].right = data.right;
+                    players[socket.id].down = data.down;
+                  break;
+                case 'down':
+                    players[socket.id].up = data.up;
+                    players[socket.id].left = data.left;
+                    players[socket.id].right = data.right;
+                    players[socket.id].down = data.down;
+                  break;
+                case 'space':
+                    var x = players[socket.id].x;
+                    var y = players[socket.id].y;
+                    var c = players[socket.id].c;
+                    players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
+                break;
+                case 'upright':
+                    players[socket.id].up = data.up;
+                    players[socket.id].left = data.left;
+                    players[socket.id].right = data.right;
+                    players[socket.id].down = data.down;
+                  break;
+                case 'upleft':
+                    players[socket.id].up = data.up;
+                    players[socket.id].left = data.left;
+                    players[socket.id].right = data.right;
+                    players[socket.id].down = data.down;
+                  break;
+                case 'downright':
+                    players[socket.id].up = data.up;
+                    players[socket.id].left = data.left;
+                    players[socket.id].right = data.right;
+                    players[socket.id].down = data.down;
+                  break;
+                case 'downleft':
+                    players[socket.id].up = data.up;
+                    players[socket.id].left = data.left;
+                    players[socket.id].right = data.right;
+                    players[socket.id].down = data.down;
+                  break;
+                case 'end':
+                    players[socket.id].up = data.up;
+                    players[socket.id].left = data.left;
+                    players[socket.id].right = data.right;
+                    players[socket.id].down = data.down;
+                break;
+              }
+        }
+    })
 })
 //sends things to render to client
 setInterval(function() {
@@ -337,5 +403,5 @@ setInterval(function() {
         }
         socket.emit('render', players)
     }
-}, 1000/45)    
+}, 1000/60)    
     
