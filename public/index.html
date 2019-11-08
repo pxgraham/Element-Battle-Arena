@@ -6,14 +6,14 @@
 <style type="text/css">
     body {
         /* background: black; */
-        background-image: url('images/arrow_up.png');
+        background-image: url('/public/images/body_background.png');
     }
 
     .container {
         position: relative;
         width: 1200px;
         height: 1200px;
-        background: white;
+        /* background: white; */
         margin: auto;
     }
 
@@ -187,6 +187,11 @@
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
         var socket = io();
+        var battleground = new Image();
+        battleground.src = '/public/images/battleground.png';
+
+        var player_down = new Image();
+        player_down.src = '/public/images/player_down.png';
 
         var joined = false;
         var position;
@@ -207,12 +212,15 @@
 
         socket.on('render', function (data) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(battleground, 0, 25, canvas.width, canvas.height)
             ctx.fillStyle = 'black';
             ctx.fillRect(canvas.width / 2, 0, 5, canvas.height);
             ctx.fillRect(0, 25, canvas.width, 5);
             for (var i in data) {
                 ctx.fillStyle = data[i].c;
                 ctx.fillRect(data[i].x, data[i].y, data[i].w, data[i].h)
+                ctx.drawImage(player_down, data[i].x, data[i].y, data[i].w, data[i].h)
+
                 ctx.fillRect(data[i].hpx, data[i].hpy, data[i].hpw, 25)
                 for (var j = 0; j < data[i].bullet.length; j++) {
                     var x = data[i].bullet[j].x;
