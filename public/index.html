@@ -13,7 +13,7 @@
         position: relative;
         width: 1200px;
         height: 1200px;
-        background: black;
+        background: white;
         margin: auto;
     }
 
@@ -308,7 +308,7 @@
         a.addEventListener('touchstart', function (e) {
             e.preventDefault();
             socket.emit('keyPress', { input: 'space' })
-        })
+        }, false)
 
         var pad = document.getElementById('joystick');
         pad.width = 500;
@@ -357,7 +357,7 @@
                 }
             }
 
-            console.log('moust event touches --- ' + mouseEvent.touches.length);
+            // console.log('moust event touches --- ' + mouseEvent.touches.length);
 
             if (mouseEvent.touches.length === 1) {
                 // stats.innerText = `One press~~~touches[0].x,y = ${Math.round(mouseEvent.touches[0].clientX - 80)},${Math.round(mouseEvent.touches[0].clientY - 80)}`;
@@ -631,7 +631,7 @@
             }
 
             joystickrender()
-        })
+        }, false)
         pad.addEventListener('touchend', function (e) {
             e.preventDefault();
             socket.emit('keyTap', {

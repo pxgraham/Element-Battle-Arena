@@ -164,7 +164,7 @@ function Player(x, y, w, h, c, speed, id) {
                 }
             }
             if(this.down) {
-                if(this.y < 450) {
+                if(this.y < 900) {
                     this.y += this.speed;
                 }
             }
