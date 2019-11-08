@@ -58,9 +58,11 @@ function Player(x, y, w, h, c, speed, id) {
                     this.target.id = players[i].id;
                     players[i].hp = this.target.hp;
                     if(players[i].hp === 0) {
-                        sessions[players[i].id].emit('hello')
+                        players[i].x = -1000;
+                        players[i].y = -1000;
                         this.target.hp = 100;  
                         this.bullet = [];                      
+                        sessions[players[i].id].emit('hello')
                     }
                 }
             }
@@ -118,6 +120,8 @@ function Player(x, y, w, h, c, speed, id) {
                     this.target.id = players[i].id;
                     players[i].hp = this.target.hp;
                     if(players[i].hp === 0) {
+                        players[i].x = -1000;
+                        players[i].y = -1000;
                         this.target.hp = 100; 
                         this.bullet = [];                       
                         sessions[players[i].id].emit('hello')
