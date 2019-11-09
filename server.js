@@ -203,7 +203,7 @@ io.sockets.on('connection', function(socket) {
 
         if(count === 0) {
             console.log('first to join')
-            var player = new Player(250, 250, 50, 50, 'red', 10, socket.id)
+            var player = new Player(250, 250, 50, 50, 'red', 20, socket.id)
             player.hpx = 0;
             player.hpy = 0;
             player.hpw = 600;
@@ -213,7 +213,7 @@ io.sockets.on('connection', function(socket) {
         } else if(count === 1) {
             for(var i in players) {
                 if(players[i].c === 'blue') {
-                    var player = new Player(250, 250, 50, 50, 'red', 10, socket.id)
+                    var player = new Player(250, 250, 50, 50, 'red', 20, socket.id)
                     player.hpx = 0;
                     player.hpy = 0;
                     player.hpw = 600;
@@ -224,7 +224,7 @@ io.sockets.on('connection', function(socket) {
                 }
             }
             console.log('1 guy here before ya')
-            var player = new Player(850, 250, 50, 50, 'blue', 10, socket.id)
+            var player = new Player(850, 250, 50, 50, 'blue', 20, socket.id)
             player.hpx = 600;
             player.hpy = 0;
             player.hpnx = 850;
@@ -407,5 +407,5 @@ setInterval(function() {
         }
         socket.emit('render', players)
     }
-}, 1000/60)    
+}, 10)    
     
