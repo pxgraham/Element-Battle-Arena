@@ -62,7 +62,7 @@ function Player(x, y, w, h, c, speed, id) {
                         players[i].y = -1000;
                         this.target.hp = 100;  
                         this.bullet = [];                      
-                        sessions[players[i].id].emit('hello')
+                        sessions[players[i].id].emit('remove')
                     }
                 }
             }
@@ -91,7 +91,7 @@ function Player(x, y, w, h, c, speed, id) {
                 }
             }
             if(this.right) {
-                if(this.x < 550) {
+                if(this.x < 750 - this.w) {
                     this.x += this.speed;
                 }
             }
@@ -106,7 +106,7 @@ function Player(x, y, w, h, c, speed, id) {
                 }
             }
             if(this.down) {
-                if(this.y < 900) {
+                if(this.y < 750 - this.h) {
                     this.y += this.speed;
                 }
             }
@@ -124,7 +124,7 @@ function Player(x, y, w, h, c, speed, id) {
                         players[i].y = -1000;
                         this.target.hp = 100; 
                         this.bullet = [];                       
-                        sessions[players[i].id].emit('hello')
+                        sessions[players[i].id].emit('remove')
                     }
                 }
             }
@@ -153,12 +153,12 @@ function Player(x, y, w, h, c, speed, id) {
                 }
             }
             if(this.right) {
-                if(this.x < 1150) {
+                if(this.x < 1500 - this.w) {
                     this.x += this.speed;
                 }
             }
             if(this.left) {
-                if(this.x > 600) {
+                if(this.x > 760) {
                     this.x -= this.speed;
                 }
             }
@@ -168,7 +168,7 @@ function Player(x, y, w, h, c, speed, id) {
                 }
             }
             if(this.down) {
-                if(this.y < 900) {
+                if(this.y < 750 - this.h) {
                     this.y += this.speed;
                 }
             }
@@ -200,36 +200,39 @@ io.sockets.on('connection', function(socket) {
         for(var i in players) {
             count++;
         }
-
+        
+        //if your first to join
         if(count === 0) {
             console.log('first to join')
-            var player = new Player(250, 250, 50, 50, 'red', 20, socket.id)
+            var player = new Player(250, 250, 50, 50, 'red', 10, socket.id)
             player.hpx = 0;
             player.hpy = 0;
-            player.hpw = 600;
-            player.hpnx = 250;
+            player.hpw = 750;
+            player.hpnx = 350;
             player.hpny = 25
             players[socket.id] = player;
+        //if your second to join as red
         } else if(count === 1) {
             for(var i in players) {
                 if(players[i].c === 'blue') {
-                    var player = new Player(250, 250, 50, 50, 'red', 20, socket.id)
+                    var player = new Player(250, 250, 50, 50, 'red', 10, socket.id)
                     player.hpx = 0;
                     player.hpy = 0;
-                    player.hpw = 600;
-                    player.hpnx = 250;
+                    player.hpw = 750;
+                    player.hpnx = 350;
                     player.hpny = 25
                     players[socket.id] = player;
                     return;
                 }
             }
+            //if your second to join as blue
             console.log('1 guy here before ya')
-            var player = new Player(850, 250, 50, 50, 'blue', 20, socket.id)
-            player.hpx = 600;
+            var player = new Player(850, 250, 50, 50, 'blue', 10, socket.id)
+            player.hpx = 760;
             player.hpy = 0;
-            player.hpnx = 850;
-            player.hpny = 25
-            player.hpw = 600;
+            player.hpw = 750;
+            player.hpnx = 1150;
+            player.hpny = 25;
             players[socket.id] = player;
         }  else if(count > 1 ) {
             console.log('match already in progress')
@@ -306,73 +309,9 @@ io.sockets.on('connection', function(socket) {
                     var x = players[socket.id].x;
                     var y = players[socket.id].y;
                     var c = players[socket.id].c;
-                    players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
-                break;
-              }
-        }
-    })
-    socket.on('keyTap', function(data) {
-        if(players[socket.id] !== undefined) {
-            switch(data.input) {
-                case 'up':
-                    players[socket.id].up = data.up;
-                    players[socket.id].left = data.left;
-                    players[socket.id].right = data.right;
-                    players[socket.id].down = data.down;
-                  break;
-                case 'left':
-                    players[socket.id].up = data.up;
-                    players[socket.id].left = data.left;
-                    players[socket.id].right = data.right;
-                    players[socket.id].down = data.down;    
-                  break;
-                case 'right':
-                    players[socket.id].up = data.up;
-                    players[socket.id].left = data.left;
-                    players[socket.id].right = data.right;
-                    players[socket.id].down = data.down;
-                  break;
-                case 'down':
-                    players[socket.id].up = data.up;
-                    players[socket.id].left = data.left;
-                    players[socket.id].right = data.right;
-                    players[socket.id].down = data.down;
-                  break;
-                case 'space':
-                    var x = players[socket.id].x;
-                    var y = players[socket.id].y;
-                    var c = players[socket.id].c;
-                    players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
-                break;
-                case 'upright':
-                    players[socket.id].up = data.up;
-                    players[socket.id].left = data.left;
-                    players[socket.id].right = data.right;
-                    players[socket.id].down = data.down;
-                  break;
-                case 'upleft':
-                    players[socket.id].up = data.up;
-                    players[socket.id].left = data.left;
-                    players[socket.id].right = data.right;
-                    players[socket.id].down = data.down;
-                  break;
-                case 'downright':
-                    players[socket.id].up = data.up;
-                    players[socket.id].left = data.left;
-                    players[socket.id].right = data.right;
-                    players[socket.id].down = data.down;
-                  break;
-                case 'downleft':
-                    players[socket.id].up = data.up;
-                    players[socket.id].left = data.left;
-                    players[socket.id].right = data.right;
-                    players[socket.id].down = data.down;
-                  break;
-                case 'end':
-                    players[socket.id].up = data.up;
-                    players[socket.id].left = data.left;
-                    players[socket.id].right = data.right;
-                    players[socket.id].down = data.down;
+                    if(players[socket.id].bullet.length < 3) {
+                        players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
+                    }
                 break;
               }
         }
