@@ -7,8 +7,8 @@ body {
 canvas {
     position: fixed;
     top: 30px;
-    left: 2.5%;
-    width: 95%;
+    left: 5%;
+    width: 90%;
     border: 1px solid white;
     background: rgba(36, 33, 33, 0.514);
 }

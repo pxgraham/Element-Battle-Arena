@@ -47,6 +47,7 @@ function Player(x, y, w, h, c, speed, id) {
         alive: true,
     }
     this.bullet = [];
+    this.clip = 3;
     this.update = function() {
         if(this.c === 'red') {
             for(var i in players) {
@@ -79,7 +80,7 @@ function Player(x, y, w, h, c, speed, id) {
                             }
                         }
                     }
-                    if (this.bullet[i].x > 1200) {
+                    if (this.bullet[i].x > 1500) {
                         this.bullet[i].id = this.id;
                         for (var j = this.bullet.length - 1; i >= 0; --i) {                
                             if (this.bullet[i].id == this.id) {
@@ -106,7 +107,7 @@ function Player(x, y, w, h, c, speed, id) {
                 }
             }
             if(this.down) {
-                if(this.y < 750 - this.h) {
+                if(this.y < 675 - this.h) {
                     this.y += this.speed;
                 }
             }
@@ -141,7 +142,7 @@ function Player(x, y, w, h, c, speed, id) {
                             }
                         }
                     }
-                    if (this.bullet[i].x < 0) {
+                    if (this.bullet[i].x < 0 - this.bullet[i].w) {
                         this.bullet[i].id = this.id;
                         for (var j = this.bullet.length - 1; i >= 0; --i) {                
                             if (this.bullet[i].id == this.id) {
@@ -168,7 +169,7 @@ function Player(x, y, w, h, c, speed, id) {
                 }
             }
             if(this.down) {
-                if(this.y < 750 - this.h) {
+                if(this.y < 675 - this.h) {
                     this.y += this.speed;
                 }
             }
@@ -309,7 +310,12 @@ io.sockets.on('connection', function(socket) {
                     var x = players[socket.id].x;
                     var y = players[socket.id].y;
                     var c = players[socket.id].c;
-                    if(players[socket.id].bullet.length < 3) {
+                    players[socket.id].clip--;
+                    setTimeout(function() {
+                        players[socket.id].clip++;
+                        return;
+                    }, 5000)
+                    if(players[socket.id].clip > -1) {
                         players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
                     }
                 break;

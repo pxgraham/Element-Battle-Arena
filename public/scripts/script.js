@@ -3,6 +3,7 @@ var ctx = canvas.getContext('2d');
 var socket = io();
 var playBtn = document.getElementById('playBtn');
 var quitBtn = document.getElementById('quitBtn');
+var help = document.getElementById('help');
 var helpBtn = document.getElementById('helpBtn');
 var menu = document.getElementById('menu');
 
@@ -21,6 +22,10 @@ quitBtn.addEventListener('click', function() {
 })
 
 helpBtn.addEventListener('click', function() {
+    menu.style.display = 'block';
+})
+
+help.addEventListener('click', function() {
     menu.style.display = 'block';
 })
 
@@ -47,6 +52,7 @@ socket.on('render', function (data) {
         ctx.fillStyle = 'white';
         ctx.fillRect(canvas.width / 2, 0, 10, canvas.height);
         ctx.fillRect(0, 25, canvas.width, 5);
+        ctx.fillRect(0, 680, canvas.width, 5);
         for (var i in data) {
             ctx.fillStyle = data[i].c;
             ctx.fillRect(data[i].x, data[i].y, data[i].w, data[i].h)
