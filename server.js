@@ -47,7 +47,7 @@ function Player(x, y, w, h, c, speed, id) {
         alive: true,
     }
     this.bullet = [];
-    this.clip = 3;
+    this.clip = 4;
     this.update = function() {
         if(this.c === 'red') {
             for(var i in players) {
@@ -310,13 +310,18 @@ io.sockets.on('connection', function(socket) {
                     var x = players[socket.id].x;
                     var y = players[socket.id].y;
                     var c = players[socket.id].c;
-                    players[socket.id].clip--;
-                    setTimeout(function() {
-                        players[socket.id].clip++;
-                        return;
-                    }, 5000)
-                    if(players[socket.id].clip > -1) {
+                    if(players[socket.id].clip > 0) { 
                         players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
+                        players[socket.id].clip--;
+                        console.log('bullet shot clip now has ' + players[socket.id].clip)                        
+                        setTimeout(function() {
+                            players[socket.id].clip++;
+                            console.log('bullet loaded clip now has ' + players[socket.id].clip)                        
+                            return;
+                        }, 3000)
+                    }
+                    if(players[socket.id].clip > 0) {
+                        // players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
                     }
                 break;
               }
