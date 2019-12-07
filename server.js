@@ -24,6 +24,7 @@ var sessions = {};
 var players = {};
 
 function Player(x, y, w, h, c, speed, id) {
+    this.element = 'fire';
     this.x = x;
     this.y = y;
     this.w = w;
@@ -229,12 +230,6 @@ io.sockets.on('connection', function(socket) {
                 player.hp = -100;
                 players[socket.id] = player;
             },
-            replaceBlue: function(x) {
-                
-            },
-            replaceRed: function(x) {
-
-            }
         } 
     }
 
@@ -300,10 +295,11 @@ io.sockets.on('connection', function(socket) {
                     }
                 }
             }
+            //if red disconnects
             if(players[socket.id].c === 'red') {
+                //checks if player is in queue and if so becomes the new red
                 for(var i in players) {
                     if(players[i].c === 'yellow') {
-
                         players[i].hp = 100;
                         players[i].c = 'red';
                         players[i].x = 250;
@@ -327,9 +323,21 @@ io.sockets.on('connection', function(socket) {
     socket.on('keyPress', function(data) {
         if(players[socket.id] !== undefined) {
             switch(data.input) {
+                case 'q':
+                    players[socket.id].element = 'fire';
+                    break;
+                case 'w':
+                    players[socket.id].element = 'water';
+                    break;
+                case 'e':
+                    players[socket.id].element = 'earth';
+                    break;
+                case 'r':
+                    players[socket.id].element = 'air';
+                    break;
                 case 'up':
                     players[socket.id].up = data.state;
-                  break;
+                    break;
                 case 'left':
                     players[socket.id].left = data.state;
                   break;
@@ -344,6 +352,20 @@ io.sockets.on('connection', function(socket) {
                     var y = players[socket.id].y;
                     var c = players[socket.id].c;
                     if(players[socket.id].clip > 0) { 
+                        switch(players[socket.id].element) {
+                            case 'fire':
+                                c = 'red'
+                                break;
+                             case 'water':
+                                c = 'blue'
+                                break;
+                             case 'earth':
+                                c = 'brown'
+                                break;
+                             case 'air':
+                                c = 'whitesmoke'
+                                break;
+                        }
                         players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
                         players[socket.id].clip--;
                         console.log('bullet shot clip now has ' + players[socket.id].clip)                        

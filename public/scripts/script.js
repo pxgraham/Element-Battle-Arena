@@ -63,20 +63,69 @@ socket.on('render', function (data) {
     
             //renders hp bars
             ctx.fillRect(data[i].hpx, data[i].hpy, data[i].hpw, 25)
-            
+
+
             //renders clips
-                ctx.fillStyle = 'yellow';
-                if(data[i].c === 'red') {
-                    console.log
-                    for(var ii = 0; ii < data[i].clip; ii++) {
-                        ctx.fillRect(redclipx[ii], 700, 10, 40)
-                    }
+            ctx.fillStyle = 'yellow';
+            if(data[i].c === 'red') {
+                for(var ii = 0; ii < data[i].clip; ii++) {
+                    ctx.fillRect(redclipx[ii], 700, 10, 40)
                 }
-                if(data[i].c === 'blue') {
-                    for(var iii = 0; iii < data[i].clip; iii++) {
-                        ctx.fillRect(blueclipx[iii], 700, 10, 40)
-                    }
+
+                 //renders elements
+                 ctx.fillStyle = 'yellow';
+                 switch(data[i].element) {
+                     case 'fire':
+                         ctx.fillRect(190, 690, 60, 60);
+                         break;
+                     case 'water':
+                            ctx.fillRect(290, 690, 60, 60);
+                         break;
+                     case 'earth':
+                            ctx.fillRect(390, 690, 60, 60);
+                         break;
+                     case 'air':
+                            ctx.fillRect(490, 690, 60, 60);
+                         break;
+                 }
+                ctx.fillStyle = 'red';
+                ctx.fillRect(200, 700, 40, 40)
+                ctx.fillStyle = 'blue';
+                ctx.fillRect(300, 700, 40, 40)
+                ctx.fillStyle = 'whitesmoke';
+                ctx.fillRect(400, 700, 40, 40)
+                ctx.fillStyle = 'brown';
+                ctx.fillRect(500, 700, 40, 40)
+            }
+            if(data[i].c === 'blue') {
+                for(var iii = 0; iii < data[i].clip; iii++) {
+                    ctx.fillRect(blueclipx[iii], 700, 10, 40)
                 }
+                 //renders elements
+                 ctx.fillStyle = 'yellow';
+                 switch(data[i].element) {
+                     case 'fire':
+                         ctx.fillRect(1000, 690, 60, 60);
+                         break;
+                     case 'water':
+                            ctx.fillRect(1100, 690, 60, 60);
+                         break;
+                     case 'earth':
+                            ctx.fillRect(1200, 690, 60, 60);
+                         break;
+                     case 'air':
+                            ctx.fillRect(1300, 690, 60, 60);
+                         break;
+                 }
+                ctx.fillStyle = 'red';
+                ctx.fillRect(1010, 700, 40, 40)
+                ctx.fillStyle = 'blue';
+                ctx.fillRect(1110, 700, 40, 40)
+                ctx.fillStyle = 'whitesmoke';
+                ctx.fillRect(1210, 700, 40, 40)
+                ctx.fillStyle = 'brown';
+                ctx.fillRect(1310, 700, 40, 40)
+            }
 
             for (var j = 0; j < data[i].bullet.length; j++) {
                 var x = data[i].bullet[j].x;
@@ -113,6 +162,22 @@ document.onkeydown = function (evt) {
         case 32:
             //space
             socket.emit('keyPress', { input: 'space' })
+            break;
+        case 81:
+            //q;
+            socket.emit('keyPress', { input: 'q' })
+            break;
+        case 87:
+            //w;
+            socket.emit('keyPress', { input: 'w' })
+            break;
+        case 69:
+            //e;
+            socket.emit('keyPress', { input: 'e' })
+            break;
+        case 82:
+            //r;
+            socket.emit('keyPress', { input: 'r' })
             break;
     }
 }
