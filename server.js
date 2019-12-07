@@ -189,79 +189,111 @@ function Bullet(x, y, w, h, c, id, speed) {
     this.speed = speed;
 }
 
+
+
 var count = 0;
 io.sockets.on('connection', function(socket) { 
     count = 0; 
     socket.id = Math.random();
     sessions[socket.id] = socket;
 
+    var modify = {
+        playerOne: {
+            create: function() {
+                var player = new Player(250, 250, 50, 50, 'red', 10, socket.id)
+                player.hpx = 0;
+                player.hpy = 0;
+                player.hpw = 750;
+                player.hpnx = 350;
+                player.hpny = 25
+                players[socket.id] = player;
+            }
+        },
+        playerTwo: {
+            create: function() {
+                var player = new Player(850, 250, 50, 50, 'blue', 10, socket.id)
+                player.hpx = 760;
+                player.hpy = 0;
+                player.hpw = 750;
+                player.hpnx = 1150;
+                player.hpny = 25;
+                players[socket.id] = player;
+            
+            }
+        },
+        playerInQueue: {
+            create: function() {
+                var player = new Player(-2000, -2000, 50, 50, 'yellow', 10, socket.id)
+                player.hpx = -110;
+                player.hpy = -100;
+                player.hp = -100;
+                players[socket.id] = player;
+            },
+            replaceBlue: function(x) {
+                
+            },
+            replaceRed: function(x) {
+
+            }
+        } 
+    }
 
     
-    socket.on('join', function() {        
+    socket.on('join', function() {  
+        
+        //keeps track of amount players 1, 2, and in queue
         for(var i in players) {
             count++;
         }
         
         //if your first to join
         if(count === 0) {
-            console.log('first to join')
-            var player = new Player(250, 250, 50, 50, 'red', 10, socket.id)
-            player.hpx = 0;
-            player.hpy = 0;
-            player.hpw = 750;
-            player.hpnx = 350;
-            player.hpny = 25
-            players[socket.id] = player;
+            console.log('joined as red')
+            modify.playerOne.create();
+
         //if your second to join as red
         } else if(count === 1) {
+
+            //checks if blue is already here. if he is, become red
             for(var i in players) {
                 if(players[i].c === 'blue') {
-                    var player = new Player(250, 250, 50, 50, 'red', 10, socket.id)
-                    player.hpx = 0;
-                    player.hpy = 0;
-                    player.hpw = 750;
-                    player.hpnx = 350;
-                    player.hpny = 25
-                    players[socket.id] = player;
+                    modify.playerOne.create();
                     return;
                 }
             }
+
             //if your second to join as blue
-            console.log('1 guy here before ya')
-            var player = new Player(850, 250, 50, 50, 'blue', 10, socket.id)
-            player.hpx = 760;
-            player.hpy = 0;
-            player.hpw = 750;
-            player.hpnx = 1150;
-            player.hpny = 25;
-            players[socket.id] = player;
+            console.log('joined as blue')
+            modify.playerTwo.create();
+
+            //if red and blue are already playing
         }  else if(count > 1 ) {
-            console.log('match already in progress')
-            var player = new Player(-2000, -2000, 50, 50, 'yellow', 10, socket.id)
-            player.hpx = -110;
-            player.hpy = -100;
-            player.hp = -100;
-            players[socket.id] = player;
+            console.log('player joined queue')
+            modify.playerInQueue.create();
         }
     })
 
     socket.on('disconnect', function() {
         count--;
+
+        //if a player disconnects
         if(players[socket.id]) {
+
             //if blue disconnects
             if(players[socket.id].c === 'blue') {
-                //checks if theres a spectator and if there is makes the first spectator the new blue
+
+                //checks if a player is in queue, if they are they become the new blue
                 for(var i in players) {
                     if(players[i].c === 'yellow') {
                         players[i].hp = 100;
                         players[i].c = 'blue';
                         players[i].x = 850;
                         players[i].y = 250;
-                        players[i].hpx = 600;
+                        players[i].hpx = 760;
                         players[i].hpy = 0;
-                        players[i].hpnx = 850;
+                        players[i].hpnx = 1150;
                         players[i].hpny = 25
-                        players[i].hpw = 600;
+                        players[i].hpw = 750;
                         delete players[socket.id]
                         delete sessions[socket.id]
                         return;
@@ -271,14 +303,15 @@ io.sockets.on('connection', function(socket) {
             if(players[socket.id].c === 'red') {
                 for(var i in players) {
                     if(players[i].c === 'yellow') {
+
                         players[i].hp = 100;
                         players[i].c = 'red';
                         players[i].x = 250;
                         players[i].y = 250;
                         players[i].hpx = 0;
                         players[i].hpy = 0;
-                        players[i].hpw = 600;
-                        players[i].hpnx = 250;
+                        players[i].hpw = 750;
+                        players[i].hpnx = 350;
                         players[i].hpny = 25
                         delete players[socket.id]
                         delete sessions[socket.id]
@@ -315,13 +348,13 @@ io.sockets.on('connection', function(socket) {
                         players[socket.id].clip--;
                         console.log('bullet shot clip now has ' + players[socket.id].clip)                        
                         setTimeout(function() {
-                            players[socket.id].clip++;
-                            console.log('bullet loaded clip now has ' + players[socket.id].clip)                        
-                            return;
+                            if(players[socket.id]) {
+                                players[socket.id].clip++;
+                                console.log('bullet loaded clip now has ' + players[socket.id].clip)                        
+                            } else {
+                                return;
+                            }
                         }, 3000)
-                    }
-                    if(players[socket.id].clip > 0) {
-                        // players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
                     }
                 break;
               }
@@ -336,11 +369,10 @@ setInterval(function() {
         players[i].update();
     }
     for(var i in sessions) {
+        
         var socket = sessions[i];
-        // console.log(players);
 
         if(players[i]) {
-            // console.log(players.length)
             if(players[i].c === 'red') {
                 socket.emit('playerTypeMessage',{
                     message: 'you are red'

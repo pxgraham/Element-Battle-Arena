@@ -44,7 +44,8 @@ function join() {
     joined = true;
     socket.emit('join');
 }
-
+var redclipx = [10, 30, 50, 70];
+var blueclipx = [770, 790, 810, 830];
 socket.on('render', function (data) {
     if(joined) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -55,10 +56,28 @@ socket.on('render', function (data) {
         ctx.fillRect(0, 680, canvas.width, 5);
         for (var i in data) {
             ctx.fillStyle = data[i].c;
+
+            //renders players
             ctx.fillRect(data[i].x, data[i].y, data[i].w, data[i].h)
             // ctx.drawImage(player_down, data[i].x, data[i].y, data[i].w, data[i].h)
     
+            //renders hp bars
             ctx.fillRect(data[i].hpx, data[i].hpy, data[i].hpw, 25)
+            
+            //renders clips
+                ctx.fillStyle = 'yellow';
+                if(data[i].c === 'red') {
+                    console.log
+                    for(var ii = 0; ii < data[i].clip; ii++) {
+                        ctx.fillRect(redclipx[ii], 700, 10, 40)
+                    }
+                }
+                if(data[i].c === 'blue') {
+                    for(var iii = 0; iii < data[i].clip; iii++) {
+                        ctx.fillRect(blueclipx[iii], 700, 10, 40)
+                    }
+                }
+
             for (var j = 0; j < data[i].bullet.length; j++) {
                 var x = data[i].bullet[j].x;
                 var y = data[i].bullet[j].y;
@@ -67,6 +86,8 @@ socket.on('render', function (data) {
                 var c = data[i].bullet[j].c;
                 ctx.fillStyle = c;
                 ctx.fillRect(x, y, w, h)
+
+
             }
             ctx.font = '30px Arial';
             ctx.fillStyle = 'white';
