@@ -24,6 +24,10 @@ var sessions = {};
 var players = {};
 
 function Player(x, y, w, h, c, speed, id) {
+    this.wallReady = true;
+    this.wallx = -500;
+    this.wally = -500;
+    this.wallUp = false;
     this.element = 'fire';
     this.x = x;
     this.y = y;
@@ -51,6 +55,10 @@ function Player(x, y, w, h, c, speed, id) {
     this.clip = 4;
     this.update = function() {
         if(this.c === 'red') {
+            if(this.wallUp){
+                this.wallx = this.x + 50;
+                this.wally = this.y - 7;
+            }
             for(var i in players) {
                 if(players[i].c === 'blue') {                  
                     this.target.x = players[i].x;
@@ -58,6 +66,7 @@ function Player(x, y, w, h, c, speed, id) {
                     this.target.w = players[i].w;
                     this.target.h = players[i].h;
                     this.target.id = players[i].id;
+                    this.target.wallUp = players[i].wallUp;
                     players[i].hp = this.target.hp;
                     if(players[i].hp === 0) {
                         players[i].x = -1000;
@@ -95,24 +104,44 @@ function Player(x, y, w, h, c, speed, id) {
             if(this.right) {
                 if(this.x < 750 - this.w) {
                     this.x += this.speed;
+                    if(this.wallUp){
+                        this.wallx = this.x + 50;
+                        this.wally = this.y - 7;
+                    }
                 }
             }
             if(this.left) {
                 if(this.x > 0) {
                     this.x -= this.speed;
+                    if(this.wallUp){
+                        this.wallx = this.x + 50;
+                        this.wally = this.y - 7;
+                    }
                 }
             }
             if(this.up) {
                 if(this.y > 30) {
                     this.y -= this.speed;
+                    if(this.wallUp){
+                        this.wallx = this.x + 50;
+                        this.wally = this.y - 7;
+                    }
                 }
             }
             if(this.down) {
                 if(this.y < 675 - this.h) {
                     this.y += this.speed;
+                    if(this.wallUp){
+                        this.wallx = this.x + 50;
+                        this.wally = this.y - 7;
+                    }
                 }
             }
         } else if(this.c === 'blue') {
+            if(this.wallUp){
+                this.wallx = this.x - 10;
+                this.wally = this.y - 7;
+            }
             for(var i in players) {
                 if(players[i].c === 'red') {                  
                     this.target.x = players[i].x;
@@ -157,21 +186,37 @@ function Player(x, y, w, h, c, speed, id) {
             if(this.right) {
                 if(this.x < 1500 - this.w) {
                     this.x += this.speed;
+                    if(this.wallUp){
+                        this.wallx = this.x - 10;
+                        this.wally = this.y - 7;
+                    }
                 }
             }
             if(this.left) {
                 if(this.x > 760) {
                     this.x -= this.speed;
+                    if(this.wallUp){
+                        this.wallx = this.x - 10;
+                        this.wally = this.y - 7;
+                    }
                 }
             }
             if(this.up) {
                 if(this.y > 30) {
                     this.y -= this.speed;
+                    if(this.wallUp){
+                        this.wallx = this.x - 10;
+                        this.wally = this.y - 7;
+                    }
                 }
             }
             if(this.down) {
                 if(this.y < 675 - this.h) {
                     this.y += this.speed;
+                    if(this.wallUp){
+                        this.wallx = this.x - 10;
+                        this.wally = this.y - 7;
+                    }
                 }
             }
         }
@@ -347,7 +392,59 @@ io.sockets.on('connection', function(socket) {
                 case 'down':
                     players[socket.id].down = data.state;
                   break;
-                case 'space':
+                case 'd':
+                    if(players[socket.id].wallReady) {
+                        players[socket.id].wallUp = true;
+                    } 
+                        setTimeout(function() {
+                            if(players[socket.id]) {
+                                players[socket.id].wallReady = true;
+                                return;
+                            } else {
+                                return;
+                            }
+                        }, 2000)
+                    if(players[socket.id].c === 'red') {
+                        setTimeout(function() {
+                            if(players[socket.id]) {
+                                players[socket.id].wallUp = false;
+                                players[socket.id].wallx = -500;
+                                players[socket.id].wallReady = false;
+                                return;
+                            } else {
+                                return;
+                            }
+                        }, 225)
+                    } else if(players[socket.id].c === 'blue') {
+                        players[socket.id].wallUp = true;
+                        players[socket.id].wallx = players[socket.id].x - 10;
+                        setTimeout(function() {
+                            if(players[socket.id]) {
+                                players[socket.id].wallUp = false;
+                                players[socket.id].wallx = -500;
+                            } else {
+                                return;
+                            }
+                        }, 150)
+                    }
+                    players[socket.id].wally = players[socket.id].y - 7;
+                    switch(players[socket.id].element) {
+                        case 'fire':
+                            c = 'red'
+                            break;
+                         case 'water':
+                            c = 'blue'
+                            break;
+                         case 'earth':
+                            c = 'brown'
+                            break;
+                         case 'air':
+                            c = 'whitesmoke'
+                            break;
+                    }
+                    players[socket.id].wallc = c;
+                    break;
+                case 'f':
                     var x = players[socket.id].x;
                     var y = players[socket.id].y;
                     var c = players[socket.id].c;

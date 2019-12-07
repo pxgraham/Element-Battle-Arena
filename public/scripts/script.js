@@ -59,8 +59,11 @@ socket.on('render', function (data) {
 
             //renders players
             ctx.fillRect(data[i].x, data[i].y, data[i].w, data[i].h)
+            // ctx.fillStyle = 'white';
+            // ctx.fillRect(data[i].x + 5, data[i].y + 5, data[i].w - 10, data[i].h - 10)
             // ctx.drawImage(player_down, data[i].x, data[i].y, data[i].w, data[i].h)
-    
+
+            ctx.fillStyle = data[i].c;
             //renders hp bars
             ctx.fillRect(data[i].hpx, data[i].hpy, data[i].hpw, 25)
 
@@ -92,10 +95,16 @@ socket.on('render', function (data) {
                 ctx.fillRect(200, 700, 40, 40)
                 ctx.fillStyle = 'blue';
                 ctx.fillRect(300, 700, 40, 40)
-                ctx.fillStyle = 'whitesmoke';
-                ctx.fillRect(400, 700, 40, 40)
                 ctx.fillStyle = 'brown';
+                ctx.fillRect(400, 700, 40, 40)
+                ctx.fillStyle = 'whitesmoke';
                 ctx.fillRect(500, 700, 40, 40)
+
+                //renders walls
+                ctx.fillStyle = data[i].wallc;
+                ctx.fillRect(data[i].wallx, data[i].wally, 10, 70);
+                ctx.fillRect(data[i].wallx - 60, data[i].wally, 70, 10);
+                ctx.fillRect(data[i].wallx - 60, data[i].wally + 60, 70, 10);
             }
             if(data[i].c === 'blue') {
                 for(var iii = 0; iii < data[i].clip; iii++) {
@@ -121,10 +130,17 @@ socket.on('render', function (data) {
                 ctx.fillRect(1010, 700, 40, 40)
                 ctx.fillStyle = 'blue';
                 ctx.fillRect(1110, 700, 40, 40)
-                ctx.fillStyle = 'whitesmoke';
-                ctx.fillRect(1210, 700, 40, 40)
                 ctx.fillStyle = 'brown';
+                ctx.fillRect(1210, 700, 40, 40)
+                ctx.fillStyle = 'whitesmoke';
                 ctx.fillRect(1310, 700, 40, 40)
+
+                //renders walls
+                ctx.fillStyle = data[i].wallc;
+                ctx.fillRect(data[i].wallx, data[i].wally, 10, 70);
+                ctx.fillRect(data[i].wallx, data[i].wally, 70, 10)
+                ctx.fillRect(data[i].wallx, data[i].wally + 60, 70, 10)
+
             }
 
             for (var j = 0; j < data[i].bullet.length; j++) {
@@ -147,6 +163,12 @@ socket.on('render', function (data) {
 
 document.onkeydown = function (evt) {
     switch (evt.keyCode) {
+        case 70:
+            socket.emit('keyPress', { input: 'f'})            
+            break;
+        case 68:
+            socket.emit('keyPress', { input: 'd'})
+            break;
         case 38:
             socket.emit('keyPress', { input: 'up', state: true })
             break;
@@ -158,10 +180,6 @@ document.onkeydown = function (evt) {
             break;
         case 40:
             socket.emit('keyPress', { input: 'down', state: true })
-            break;
-        case 32:
-            //space
-            socket.emit('keyPress', { input: 'space' })
             break;
         case 81:
             //q;
