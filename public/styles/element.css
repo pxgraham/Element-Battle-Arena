@@ -1,127 +1,15 @@
 body {
     background: black;
-    margin: 0px;
-    /* background-image: url('/public/images/body_background.png'); */
 }
 
 canvas {
     position: fixed;
+    display: none;
     top: 30px;
     left: 5%;
     width: 90%;
     border: 1px solid white;
     background: rgba(36, 33, 33, 0.514);
-}
-
-#playBtn {
-    position: fixed;
-    left: 40%;
-    top: 0%;
-    color: white;
-    z-index: 2;
-    border: 1px solid lime;
-    border-radius: 0px 10px 0px 10px;
-    padding: 5px;
-    font-family: arial;
-}
-
-#playBtn:hover {
-    cursor: pointer;
-    background: lime;
-}
-
-#help {
-    position: fixed;
-    left: 55%;
-    top: 0%;
-    color: white;
-    z-index: 2;
-    border: 1px solid lime;
-    border-radius: 0px 10px 0px 10px;
-    padding: 5px;
-    font-family: arial;
-}
-
-#help:hover {
-    cursor: pointer;
-    background: lime;
-}
-
-
-
-#logo {
-    position: fixed;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-}
-
-
-.btn3d {
-    position: relative;
-    top: -6px;
-    border: 0;
-    transition: all 40ms linear;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 2px;
-    margin-right: 2px;
-}
-
-.btn3d:active:focus,
-.btn3d:focus:hover,
-.btn3d:focus {
-    -moz-outline-style: none;
-    outline: medium none;
-}
-.btn3d:active,
-.btn3d.active {
-    top: 2px;
-}
-.btn3d.btn-success {
-    box-shadow: 0 0 0 1px #31c300 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #5eb924, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
-    background-color: #78d739;
-}
-
-.btn3d.btn-success:active,
-.btn3d.btn-success.active {
-    box-shadow: 0 0 0 1px #30cd00 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
-    background-color: #78d739;
-}
-
-
-#quitBtn {
-    display: none;
-    position: fixed;
-    top: 0px;
-    right: 0px;
-    color: white;
-    z-index: 2;
-    border: 1px solid lime;
-    border-radius: 0px 10px 0px 10px;
-    padding: 5px;
-    font-family: arial;
-}
-
-#helpBtn {
-    display: none;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    color: white;
-    z-index: 2;
-    border: 1px solid lime;
-    border-radius: 0px 10px 0px 10px;
-    padding: 5px;
-    font-family: arial;
-}
-#helpBtn:hover {
-    cursor: pointer;
-    background: lime;
-}
-#quitBtn:hover {
-    cursor: pointer;
-    background: lime;
 }
 
 
@@ -158,4 +46,71 @@ canvas {
     font-size: 30px;
     text-align: left;
     color: lime;
+}
+
+#quitBtn {
+    display: none;
+}
+
+#playBtn2:hover, #quitBtn:hover {
+    cursor: pointer !important;
+}
+
+#playBtn2:hover {    
+    background: rgba(255, 0, 0, 0.397) !important;
+    text-decoration: none;
+}
+
+
+#playBtn, #playBtn2 {
+    font-size: 35px; 
+    background: rgba(255, 0, 0, 0.664); 
+    color: whitesmoke !important; 
+    border-radius: 10px 10px 10px 10px; 
+    padding: 12px;
+    text-decoration: none;
+}
+
+.ele-btn:hover {
+    cursor: pointer;
+}
+
+#inGameNav {
+    display: none;
+}
+
+#settings:hover {
+    cursor: pointer;
+}
+
+#settings:hover, #settings1:hover, #settingsClose:hover {
+    cursor: pointer;
+}
+
+#settingsMenu {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.726);
+    z-index: 20;
+}
+
+#settingsContainer {
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.623);
+}
+ 
+.settings-list {
+    font-size: 30px;
+}
+
+.nav-content-disabled {
+    color: grey !important;
+}
+.nav-content-disabled:hover {
+    cursor: default;
+    text-decoration: none !important;
 }

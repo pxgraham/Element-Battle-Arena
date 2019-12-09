@@ -2,35 +2,46 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var socket = io();
 var playBtn = document.getElementById('playBtn');
-var quitBtn = document.getElementById('quitBtn');
 var help = document.getElementById('help');
 var helpBtn = document.getElementById('helpBtn');
 var menu = document.getElementById('menu');
+var mainMenu = document.getElementById('mainMenu');
+var inGameNav = document.getElementById('inGameNav');
+var settings = document.getElementById('settings');
+var settings1 = document.getElementById('settings1');
+var settingsClose = document.getElementById('settingsClose');
 
 
-playBtn.addEventListener('click', function() {
+function openSettings() {
+    document.getElementById('settingsMenu').style.display = 'block';
+}
+
+function closeSettings() {
+    document.getElementById('settingsMenu').style.display = 'none';
+}
+
+settings.addEventListener('click', function() {
+    openSettings();
+})
+
+settings1.addEventListener('click', function() {
+    openSettings();
+})
+
+settingsClose.addEventListener('click', function() {
+    closeSettings();
+})
+
+playBtn1.addEventListener('click', function() {
     join();
-    playBtn.style.display = 'none';
-    document.getElementById('logo').style.display = 'none';
-    document.getElementById('help').style.display = 'none';
-    document.getElementById('quitBtn').style.display = 'block';
-    document.getElementById('helpBtn').style.display = 'block';
+    mainMenu.style.display = 'none';
+    quitBtn.style.display = 'none';
+    document.getElementById('canvas').style.display = 'block';
 })
-
-quitBtn.addEventListener('click', function() {
-    location.reload();
-})
-
-helpBtn.addEventListener('click', function() {
-    menu.style.display = 'block';
-})
-
-help.addEventListener('click', function() {
-    menu.style.display = 'block';
-})
-
-closeMenu.addEventListener('click', function() {
-    menu.style.display = 'none';
+playBtn2.addEventListener('click', function() {
+    join();
+    mainMenu.style.display = 'none';
+    document.getElementById('canvas').style.display = 'block';
 })
 
 
@@ -41,6 +52,8 @@ socket.on('remove', function () {
 var joined = false;
 
 function join() {
+    inGameNav.style.display = 'block';
+    canvas.style.display = 'block';
     joined = true;
     socket.emit('join');
 }

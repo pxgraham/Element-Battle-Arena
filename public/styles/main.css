@@ -25,14 +25,18 @@ body {
 } */
 
 .nav-content {
-    float: right;
+    /* float: right; */
+    flex-grow: 1;
+    text-align: right;
     margin-top: 20px;
     font-size: 20px;
+    margin-right: 0px;
 }
 
 .nav-content-mobile {
     display: none;
     position: fixed;
+    margin-right: 0px;
     top: 20px;
     right: 25px;
     color: rgb(219, 0, 0) !important;
@@ -73,4 +77,47 @@ body {
     .nav-content-mobile {
         display: inline-block;
     }
+}
+
+.contact-form {
+    color: whitesmoke;
+    margin-top: 50px;
+}
+
+
+.contact-form-list {
+    width: 100%;
+}
+
+.contact-input {
+    width: 100% !important;
+}
+
+.contact-form-head {
+    font-size: 25px;
+    color: rgb(219, 0, 0) !important ;
+    font-family: 'Shadows Into Light Two', cursive;
+}
+
+.contact-link {
+    text-align: center;
+    color: rgb(219, 0, 0) !important;
+    font-size: 10px;
+}
+
+.contact-link-icon {
+    text-align: center;
+    color: rgb(219, 0, 0) !important;
+    font-size: 24px;
+}
+
+.contact-link-container {
+    border: 1px solid rgba(255, 0, 0, 0.438);
+    border-radius: 5px 5px 5px 5px;
+}
+
+.contact-link-container:hover {
+    cursor: pointer;
+    background-color: rgba(219, 0, 0, 0.295) !important;
+    color: black;
 }
