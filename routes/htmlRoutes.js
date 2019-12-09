@@ -14,6 +14,10 @@ module.exports = function(app) {
         res.sendFile(path.join(__dirname, "../public/pages/element.html"));
     });
 
+    app.get("/contact", function(req, res) {
+        res.sendFile(path.join(__dirname, "../public/pages/contact.html"));
+    });
+
     app.get("/", function(req, res) {
         res.sendFile(path.join(__dirname, "../public/pages/index.html"));
     });
