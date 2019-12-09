@@ -7,9 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/public", express.static(__dirname + "/public"));
 
-app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
-});
+require("./routes/htmlRoutes")(app);
 
 var serv = require('http').createServer(app);
 
@@ -246,7 +244,7 @@ io.sockets.on('connection', function(socket) {
     var modify = {
         playerOne: {
             create: function() {
-                var player = new Player(250, 250, 50, 50, 'red', 10, socket.id)
+                var player = new Player(250, 250, 50, 50, 'red', 5.65464654, socket.id)
                 player.hpx = 0;
                 player.hpy = 0;
                 player.hpw = 750;
@@ -257,7 +255,7 @@ io.sockets.on('connection', function(socket) {
         },
         playerTwo: {
             create: function() {
-                var player = new Player(850, 250, 50, 50, 'blue', 10, socket.id)
+                var player = new Player(850, 250, 50, 50, 'blue', 5.65464654, socket.id)
                 player.hpx = 760;
                 player.hpy = 0;
                 player.hpw = 750;
@@ -269,7 +267,7 @@ io.sockets.on('connection', function(socket) {
         },
         playerInQueue: {
             create: function() {
-                var player = new Player(-2000, -2000, 50, 50, 'yellow', 10, socket.id)
+                var player = new Player(-2000, -2000, 50, 50, 'yellow', 5.65464654, socket.id)
                 player.hpx = -110;
                 player.hpy = -100;
                 player.hp = -100;

@@ -1,0 +1,25 @@
+.navbar-brand {
+    color: rgb(219, 0, 0) !important;
+    font-size: 40px;
+    font-family: 'Caveat', cursive;
+}
+
+.nav-link {
+    margin-top: 8px;
+    color: rgb(219, 0, 0) !important;
+    font-size: 20px;
+    font-family: 'Caveat', cursive;
+}
+
+.nav-link:hover {
+    cursor: pointer;
+    margin-top: 8px;
+    text-decoration: underline;
+    color: black !important;
+    font-size: 20px;
+    font-family: 'Caveat', cursive;
+}
+
+.nav-right {
+    float: right;
+}
