@@ -391,56 +391,42 @@ io.sockets.on('connection', function(socket) {
                     players[socket.id].down = data.state;
                   break;
                 case 'd':
-                    if(players[socket.id].wallReady) {
-                        players[socket.id].wallUp = true;
-                    } 
-                        setTimeout(function() {
-                            if(players[socket.id]) {
+                    if(players[socket.id]) {
+                        if(players[socket.id].wallReady) {
+                            players[socket.id].wallUp = true;
+                            players[socket.id].wallReady = false;
+                            setTimeout(function() {
+                                players[socket.id].wallUp = false;
+                                players[socket.id].wallx = -500;
+                                return;
+                            }, 225)
+
+                            setTimeout(function() {
                                 players[socket.id].wallReady = true;
-                                return;
-                            } else {
-                                return;
-                            }
-                        }, 2000)
-                    if(players[socket.id].c === 'red') {
-                        setTimeout(function() {
-                            if(players[socket.id]) {
-                                players[socket.id].wallUp = false;
-                                players[socket.id].wallx = -500;
-                                players[socket.id].wallReady = false;
-                                return;
-                            } else {
-                                return;
-                            }
-                        }, 225)
-                    } else if(players[socket.id].c === 'blue') {
-                        players[socket.id].wallUp = true;
-                        players[socket.id].wallx = players[socket.id].x - 10;
-                        setTimeout(function() {
-                            if(players[socket.id]) {
-                                players[socket.id].wallUp = false;
-                                players[socket.id].wallx = -500;
-                            } else {
-                                return;
-                            }
-                        }, 150)
+                            }, 2000)
+
+                        } else {
+                            return;
+                        }
+                        players[socket.id].wally = players[socket.id].y - 7;
+
+                        switch(players[socket.id].element) {
+                            case 'fire':
+                                c = 'red'
+                                break;
+                             case 'water':
+                                c = 'blue'
+                                break;
+                             case 'earth':
+                                c = 'brown'
+                                break;
+                             case 'air':
+                                c = 'whitesmoke'
+                                break;
+                        }
+                        players[socket.id].wallc = c;
+                        
                     }
-                    players[socket.id].wally = players[socket.id].y - 7;
-                    switch(players[socket.id].element) {
-                        case 'fire':
-                            c = 'red'
-                            break;
-                         case 'water':
-                            c = 'blue'
-                            break;
-                         case 'earth':
-                            c = 'brown'
-                            break;
-                         case 'air':
-                            c = 'whitesmoke'
-                            break;
-                    }
-                    players[socket.id].wallc = c;
                     break;
                 case 'f':
                     var x = players[socket.id].x;

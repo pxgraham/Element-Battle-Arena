@@ -34,8 +34,7 @@ settingsClose.addEventListener('click', function() {
 
 playBtn1.addEventListener('click', function() {
     join();
-    mainMenu.style.display = 'none';
-    quitBtn.style.display = 'none';
+    mainMenu.style.display = 'none';    
     document.getElementById('canvas').style.display = 'block';
 })
 playBtn2.addEventListener('click', function() {
@@ -116,8 +115,18 @@ socket.on('render', function (data) {
                 //renders walls
                 ctx.fillStyle = data[i].wallc;
                 ctx.fillRect(data[i].wallx, data[i].wally, 10, 70);
-                ctx.fillRect(data[i].wallx - 60, data[i].wally, 70, 10);
-                ctx.fillRect(data[i].wallx - 60, data[i].wally + 60, 70, 10);
+
+                //renders parry ready state
+                if(data[i].wallReady) {
+                    ctx.fillStyle = 'yellow';
+                    ctx.font = 'Arial';
+                    ctx.fillText('Sheild UP', 575, 727)
+                } else {
+                    ctx.fillStyle = 'red';
+                    ctx.font = 'Arial';
+                    ctx.fillText('Sheild ↓', 575, 727)
+                }
+
             }
             if(data[i].c === 'blue') {
                 for(var iii = 0; iii < data[i].clip; iii++) {
@@ -151,8 +160,17 @@ socket.on('render', function (data) {
                 //renders walls
                 ctx.fillStyle = data[i].wallc;
                 ctx.fillRect(data[i].wallx, data[i].wally, 10, 70);
-                ctx.fillRect(data[i].wallx, data[i].wally, 70, 10)
-                ctx.fillRect(data[i].wallx, data[i].wally + 60, 70, 10)
+
+                //renders wall ready state
+                if(data[i].wallReady) {                    
+                    ctx.fillStyle = 'yellow';
+                    ctx.font = 'Arial';
+                    ctx.fillText('Sheild UP', 1360, 727)
+                } else {
+                    ctx.fillStyle = 'red';
+                    ctx.font = 'Arial';
+                    ctx.fillText('Sheild ↓', 1360, 727)
+                }
 
             }
 
