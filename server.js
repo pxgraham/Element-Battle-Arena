@@ -80,7 +80,7 @@ function Player(x, y, w, h, c, speed, id) {
                 for(var i = 0; i < this.bullet.length; i++) {
                     this.bullet[i].x += this.bullet[i].speed;
                     if(this.bullet[i].x + this.bullet[i].w >= this.target.x && this.bullet[i].y + this.bullet[i].h >= this.target.y && this.bullet[i].y <= this.target.y + this.target.h && this.bullet[i].x < this.target.x + this.target.w) {
-
+ 
                         if(this.target.wallUp) {
                             switch(this.bullet[i].c) {
                                 case 'red':
