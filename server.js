@@ -65,6 +65,7 @@ function Player(x, y, w, h, c, speed, id) {
                     this.target.h = players[i].h;
                     this.target.id = players[i].id;
                     this.target.wallUp = players[i].wallUp;
+                    this.target.element = players[i].element;
                     players[i].hp = this.target.hp;
                     if(players[i].hp === 0) {
                         players[i].x = -1000;
@@ -79,7 +80,149 @@ function Player(x, y, w, h, c, speed, id) {
                 for(var i = 0; i < this.bullet.length; i++) {
                     this.bullet[i].x += this.bullet[i].speed;
                     if(this.bullet[i].x + this.bullet[i].w >= this.target.x && this.bullet[i].y + this.bullet[i].h >= this.target.y && this.bullet[i].y <= this.target.y + this.target.h && this.bullet[i].x < this.target.x + this.target.w) {
-                        this.target.hp -= 10;
+
+                        if(this.target.wallUp) {
+                            switch(this.bullet[i].c) {
+                                case 'red':
+                                    switch(this.target.element) {
+                                        case 'fire':
+                                            console.log('red fire ball hit blue fire wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'blue') {                                                    
+                                                    rebound(players[ai], 'bigFire');
+                                                }
+                                            }
+                                            break;
+                                        case 'water':
+                                            console.log('red fire ball hit blue water wall')
+                                            //bullet gets deleted
+                                            break;
+                                        case 'earth':
+                                            console.log('red fire ball hit blue earth wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'blue') {
+                                                    rebound(players[ai], 'meteor');
+                                                }
+                                            }
+                                            break;
+                                        case 'air':
+                                            console.log('red fire ball hit blue air wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'blue') {                                                    
+                                                    rebound(players[ai], 'light');
+                                                }
+                                            }
+                                            break;
+                                    }
+                                    break;
+                                case 'brown':
+                                    switch(this.target.element) {
+                                        case 'fire':
+                                            console.log('red earth ball hit blue fire wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'blue') {
+                                                    rebound(players[ai], 'meteor');
+                                                }
+                                            }
+                                            break;
+                                        case 'water':
+                                            console.log('red earth ball hit blue water wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'blue') {
+                                                    rebound(players[ai], 'plant');
+                                                }
+                                            }
+                                            break;
+                                        case 'earth':
+                                            console.log('red earth ball hit blue earth wall')
+                                            for(var ai in players) {
+                                                for(var ai in players) {
+                                                    if(players[ai].c === 'blue') {
+                                                        rebound(players[ai], 'bigEarth');
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                        case 'air':
+                                            console.log('red earth ball hit blue air wall')
+                                            //delete
+                                            break;
+                                    }
+                                    break;
+                                case 'blue':
+                                    switch(this.target.element) {
+                                        case 'fire':
+                                            console.log('red water ball hit blue fire wall')
+                                            //delete
+                                            break;
+                                        case 'water':
+                                            console.log('red water ball hit blue water wall')
+                                            for(var ai in players) {
+                                                for(var ai in players) {
+                                                    if(players[ai].c === 'blue') {
+                                                        rebound(players[ai], 'bigWater');
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                        case 'earth':
+                                            console.log('red water ball hit blue earth wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'blue') {
+                                                    rebound(players[ai], 'plant');
+                                                }
+                                            }
+                                            break;
+                                        case 'air':
+                                            console.log('red water ball hit blue air wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'blue') {
+                                                    rebound(players[ai], 'ice');
+                                                }
+                                            }
+                                            break;
+                                    }
+                                    break;
+                                case 'whitesmoke':
+                                    switch(this.target.element) {
+                                        case 'fire':
+                                            console.log('red air ball hit blue fire wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'blue') {
+                                                    rebound(players[ai], 'light');
+                                                }
+                                            }
+                                            break;
+                                        case 'water':
+                                            console.log('red air ball hit blue water wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'blue') {
+                                                    rebound(players[ai], 'ice');
+                                                }
+                                            }
+                                            break;
+                                        case 'earth':
+                                            console.log('red air ball hit blue earth wall')
+                                            //delete
+                                            break;
+                                        case 'air':
+                                            console.log('red air ball hit blue air wall')
+                                            for(var ai in players) {
+                                                for(var ai in players) {
+                                                    if(players[ai].c === 'blue') {
+                                                        rebound(players[ai], 'bigAir');
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                    }
+                                    break;
+                            }
+                        } else {
+                            this.target.hp -= 10;
+                        }
+
+                        //enemy/wall hit bullet deletion
                         this.bullet[i].id = id;   
                         for (var j = this.bullet.length - 1; i >= 0; --i) {                
                             if (this.bullet[i].id == this.id) {
@@ -87,7 +230,9 @@ function Player(x, y, w, h, c, speed, id) {
                                 return;
                             }
                         }
+                        
                     }
+                    //off screen bullet deletion
                     if (this.bullet[i].x > 1500) {
                         this.bullet[i].id = this.id;
                         for (var j = this.bullet.length - 1; i >= 0; --i) {                
@@ -147,6 +292,8 @@ function Player(x, y, w, h, c, speed, id) {
                     this.target.w = players[i].w;
                     this.target.h = players[i].h;
                     this.target.id = players[i].id;
+                    this.target.wallUp = players[i].wallUp;
+                    this.target.element = players[i].element;
                     players[i].hp = this.target.hp;
                     if(players[i].hp === 0) {
                         players[i].x = -1000;
@@ -158,10 +305,145 @@ function Player(x, y, w, h, c, speed, id) {
                 }
             }
             if(this.bullet.length > 0) {
+                console.log(this.bullet.length)
                 for(var i = 0; i < this.bullet.length; i++) {
                     this.bullet[i].x -= this.bullet[i].speed;
                     if(this.bullet[i].x + this.bullet[i].w >= this.target.x && this.bullet[i].y + this.bullet[i].h >= this.target.y && this.bullet[i].y <= this.target.y + this.target.h && this.bullet[i].x < this.target.x + this.target.w) {
-                        this.target.hp -= 10;
+                        if(this.target.wallUp) {
+                            switch(this.bullet[i].c) {
+                                case 'red':
+                                    switch(this.target.element) {
+                                        case 'fire':
+                                            console.log('blue fire ball hit red fire wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'bigFire');
+                                                }
+                                            }
+                                            break;
+                                        case 'water':
+                                            console.log('blue fire ball hit red water wall')
+                                            //delete
+                                            break;
+                                        case 'earth':
+                                            console.log('blue fire ball hit red earth wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'meteor');
+                                                }
+                                            }
+                                            break;
+                                        case 'air':
+                                            console.log('blue fire ball hit red air wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'light');
+                                                }
+                                            }
+                                            break;
+                                    }
+                                    break;
+                                case 'brown':
+                                    switch(this.target.element) {
+                                        case 'fire':
+                                            console.log('blue earth ball hit red fire wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'meteor');
+                                                }
+                                            }
+                                            break;
+                                        case 'water':
+                                            console.log('blue earth ball hit red water wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'plant');
+                                                }
+                                            }
+                                            break;
+                                        case 'earth':
+                                            console.log('blue earth ball hit red earth wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'bigEarth');
+                                                }
+                                            }
+                                            break;
+                                        case 'air':
+                                            console.log('blue earth ball hit red air wall')
+                                            //delete
+                                            break;
+                                    }
+                                    break;
+                                case 'blue':
+                                    switch(this.target.element) {
+                                        case 'fire':
+                                            console.log('blue water ball hit red fire wall')
+                                            //delete
+                                            break;
+                                        case 'water':
+                                            console.log('blue water ball hit red water wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'bigWater');
+                                                }
+                                            }
+                                            break;
+                                        case 'earth':
+                                            console.log('blue water ball hit red earth wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'plant');
+                                                }
+                                            }
+                                            break;
+                                        case 'air':
+                                            console.log('blue water ball hit red air wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'light');
+                                                }
+                                            }
+                                            break;
+                                    }
+                                    break;
+                                case 'whitesmoke':
+                                    switch(this.target.element) {
+                                        case 'fire':
+                                            console.log('blue air ball hit red fire wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'light');
+                                                }
+                                            }
+                                            break;
+                                        case 'water':
+                                            console.log('blue air ball hit red water wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'bigWater');
+                                                }
+                                            }
+                                            break;
+                                        case 'earth':
+                                            console.log('blue air ball hit red earth wall')
+                                            //delete
+                                            break;
+                                        case 'air':
+                                            console.log('blue air ball hit red air wall')
+                                            for(var ai in players) {
+                                                if(players[ai].c === 'red') {                                                
+                                                    rebound(players[ai], 'bigAir');
+                                                }
+                                            }
+                                            break;
+                                    }
+                                    break;
+                            }
+                        } else {
+                            this.target.hp -= 10;
+                        }
+                        //enemy/wall hit bullet deletion
                         this.bullet[i].id = id;   
                         for (var j = this.bullet.length - 1; i >= 0; --i) {                
                             if (this.bullet[i].id == this.id) {
@@ -169,7 +451,10 @@ function Player(x, y, w, h, c, speed, id) {
                                 return;
                             }
                         }
+                        
                     }
+
+                    //off screen bullet deletion
                     if (this.bullet[i].x < 0 - this.bullet[i].w) {
                         this.bullet[i].id = this.id;
                         for (var j = this.bullet.length - 1; i >= 0; --i) {                
@@ -223,7 +508,7 @@ function Player(x, y, w, h, c, speed, id) {
 }
 
 
-function Bullet(x, y, w, h, c, id, speed) {
+function Bullet(x, y, w, h, c, id, speed, level) {
     this.x = x;
     this.y = y;
     this.w = w;
@@ -231,8 +516,54 @@ function Bullet(x, y, w, h, c, id, speed) {
     this.c = c;
     this.id = id;
     this.speed = speed;
+    this.level = level;
+    if(this.level === 2) {
+        // this.speed = 15;
+    }
 }
-
+function rebound(player, type) {
+    switch(type) {
+        case 'bigFire':
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(255, 0, 0)', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(255, 0, 0)', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(255, 0, 0)', Math.random(), 15, 2))
+            break;
+        case 'bigWater':
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(0, 0, 255)', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(0, 0, 255)', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(0, 0, 255)', Math.random(), 15, 2))
+            break;
+        case 'bigAir':
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(245, 245, 245)', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(245, 245, 245)', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(245, 245, 245)', Math.random(), 15, 2))
+            break;
+        case 'bigEarth':
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(165, 42, 42)', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(165, 42, 42)', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'rgb(165, 42, 42)', Math.random(), 15, 2))
+            break;
+        case 'light':
+            player.bullet.push(new Bullet(player.x + 10, player.y + 5, 50, 10, 'yellow', Math.random(), 45, 2))
+            player.bullet.push(new Bullet(player.x - 10, player.y - 5, 50, 10, 'yellow', Math.random(), 45, 2))
+            break;
+        case 'meteor':
+            player.bullet.push(new Bullet(player.x, player.y - 60, 20, 20, 'FireBrick', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x + 10, player.y, 30, 30, 'FireBrick', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y + 60, 20, 20, 'FireBrick', Math.random(), 15, 2))
+            break;
+        case 'plant':
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'lime', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'lime', Math.random(), 15, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 50, 50, 'lime', Math.random(), 15, 2))
+            break;
+        case 'ice':
+            player.bullet.push(new Bullet(player.x, player.y, 75, 75, 'cyan', Math.random(), 5, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 75, 75, 'cyan', Math.random(), 5, 2))
+            player.bullet.push(new Bullet(player.x, player.y, 75, 75, 'cyan', Math.random(), 5, 2))
+            break;
+    }
+}
 
 
 var count = 0;
@@ -447,7 +778,7 @@ io.sockets.on('connection', function(socket) {
                                 c = 'whitesmoke'
                                 break;
                         }
-                        players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, socket.id, 8))
+                        players[socket.id].bullet.push(new Bullet(x, y, 25, 25, c, Math.random(), 8, 1))
                         players[socket.id].clip--;
                         console.log('bullet shot clip now has ' + players[socket.id].clip)                        
                         setTimeout(function() {
