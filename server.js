@@ -401,7 +401,7 @@ function Player(x, y, w, h, c, speed, id) {
                                             console.log('blue water ball hit red air wall')
                                             for(var ai in players) {
                                                 if(players[ai].c === 'red') {                                                
-                                                    rebound(players[ai], 'light');
+                                                    rebound(players[ai], 'ice');
                                                 }
                                             }
                                             break;
@@ -421,7 +421,7 @@ function Player(x, y, w, h, c, speed, id) {
                                             console.log('blue air ball hit red water wall')
                                             for(var ai in players) {
                                                 if(players[ai].c === 'red') {                                                
-                                                    rebound(players[ai], 'bigWater');
+                                                    rebound(players[ai], 'ice');
                                                 }
                                             }
                                             break;
