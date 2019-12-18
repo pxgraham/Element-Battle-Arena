@@ -727,13 +727,21 @@ io.sockets.on('connection', function(socket) {
                             players[socket.id].wallUp = true;
                             players[socket.id].wallReady = false;
                             setTimeout(function() {
-                                players[socket.id].wallUp = false;
-                                players[socket.id].wallx = -500;
-                                return;
+                                if(players[socket.id]) {
+                                    players[socket.id].wallUp = false;
+                                    players[socket.id].wallx = -500;
+                                    return;
+                                } else {
+                                    return;
+                                }
                             }, 225)
 
                             setTimeout(function() {
-                                players[socket.id].wallReady = true;
+                                if(players[socket.id]) {
+                                    players[socket.id].wallReady = true;
+                                } else {
+                                    return;
+                                }
                             }, 2000)
 
                         } else {
@@ -823,5 +831,4 @@ setInterval(function() {
         }
         socket.emit('render', players)
     }
-}, 10)    
-    
+}, 10)   
