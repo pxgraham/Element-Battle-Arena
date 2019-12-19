@@ -3,11 +3,14 @@ body {
 }
 
 canvas {
+    padding: 10px;
+    padding-top: 25px;
     position: fixed;
     display: none;
-    top: 30px;
-    left: 5%;
-    width: 90%;
+    top: 0px;
+    left: 0%;
+    width: 100%;
+    height: 100%;
     border: 1px solid white;
     background: rgba(36, 33, 33, 0.514);
 }
