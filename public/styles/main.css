@@ -1,6 +1,10 @@
 body {
-    background: rgb(6, 6, 12);
+    /* background: rgb(6, 6, 12); */
     font-family: 'ABeeZee', sans-serif;
+}
+
+.text-silt {
+    font-family: Shadows Into Light Two, cursive;
 }
 
 .navbar-brand {

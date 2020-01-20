@@ -1,161 +1,194 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var socket = io();
-var playBtn = document.getElementById('playBtn');
-var help = document.getElementById('help');
-var helpBtn = document.getElementById('helpBtn');
-var menu = document.getElementById('menu');
-var mainMenu = document.getElementById('mainMenu');
-var inGameNav = document.getElementById('inGameNav');
-var settings = document.getElementById('settings');
-var settings1 = document.getElementById('settings1');
-var settingsClose = document.getElementById('settingsClose');
-
-
-function openSettings() {
-    document.getElementById('settingsMenu').style.display = 'block';
-}
-
-function closeSettings() {
-    document.getElementById('settingsMenu').style.display = 'none';
-}
-
-settings.addEventListener('click', function() {
-    openSettings();
-})
-
-settings1.addEventListener('click', function() {
-    openSettings();
-})
-
-settingsClose.addEventListener('click', function() {
-    closeSettings();
-})
-
-playBtn1.addEventListener('click', function() {
-    join();
-    mainMenu.style.display = 'none';    
-    document.getElementById('canvas').style.display = 'block';
-})
-playBtn2.addEventListener('click', function() {
-    join();
-    mainMenu.style.display = 'none';
-    document.getElementById('canvas').style.display = 'block';
-})
-
-
-socket.on('remove', function () {
-    location.reload();
-})
-
 var joined = false;
 
+var mainMenu = document.getElementById('mainMenu');
+var controlsMenu = document.getElementById('controlsMenu');
+var statsMenu = document.getElementById('stats');
+var navbar = document.getElementById('navbar');
+
+document.addEventListener('click', function(e) {
+    switch(e.target.id) {
+        case 'playBtn':
+            join();
+            mainMenu.style.display = 'none';
+            canvas.style.display = 'block';
+            navbar.style.display = 'flex';
+            break;
+        case 'leaveGame':
+            if(confirm('You sure you want to leave?')) {
+                leaveGame();
+            } else {
+                //do nothing
+            }            
+            break;
+        case 'showControls':
+            if(controlsMenu.style.display === 'block') {
+                controlsMenu.style.display = 'none';
+            } else {
+                controlsMenu.style.display = 'block';
+            }
+            break;
+        case 'closeControls':
+            controlsMenu.style.display = 'none';
+            break;
+        default:
+            //do nothing
+    }
+})
+
+socket.on('remove', function () {
+    leaveGame();
+})
+
+
 function join() {
-    inGameNav.style.display = 'block';
+    document.getElementById('bottom-area').style.display = 'flex';
     canvas.style.display = 'block';
     joined = true;
     socket.emit('join');
+    var name = document.getElementById('name').value;
+    if(!name) {
+        socket.emit('setName', {yourName: 'player'});    
+    } else {
+        socket.emit('setName', {yourName: name});
+    }
 }
-var redclipx = [10, 30, 50, 70];
-var blueclipx = [770, 790, 810, 830];
+
+function leaveGame() {
+    location.reload();
+}
+
+var redclipx = [350, 375, 400, 425];
+var blueclipx = [1125, 1150, 1175, 1200];
 socket.on('render', function (data) {
     if(joined) {
+
+        //ALL PLAYER RENDER
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // ctx.drawImage(battleground, 0, 25, canvas.width, canvas.height)
         ctx.fillStyle = 'white';
         ctx.fillRect(canvas.width / 2, 0, 10, canvas.height);
-        ctx.fillRect(0, 25, canvas.width, 5);
+        ctx.fillRect(0, 30, canvas.width, 1);
         ctx.fillRect(0, 680, canvas.width, 5);
+
+        //LOOP OVER DATA COMING FROM SERVER
         for (var i in data) {
-            ctx.fillStyle = data[i].c;
 
             //renders players
-            ctx.fillRect(data[i].x, data[i].y, data[i].w, data[i].h)
-            // ctx.fillStyle = 'white';
-            // ctx.fillRect(data[i].x + 5, data[i].y + 5, data[i].w - 10, data[i].h - 10)
-            // ctx.drawImage(player_down, data[i].x, data[i].y, data[i].w, data[i].h)
-
             ctx.fillStyle = data[i].c;
-            //renders hp bars
-            ctx.fillRect(data[i].hpx, data[i].hpy, data[i].hpw, 25)
+            ctx.fillRect(data[i].x, data[i].y, data[i].w, data[i].h)
 
+            //RED RENDER STUFF
+            if(data[i].c === 'red') { 
 
-            //renders clips
-            ctx.fillStyle = 'yellow';
-            if(data[i].c === 'red') {
+                //RENDERS NAME
+                ctx.font = '20px Roboto';
+                ctx.fillText(data[i].name, 10, 22.5)
+                
+                //RENDERS RED HP BAR AND CLIP
+                ctx.font = '14px Arial';
+                ctx.fillText(`HEALTH   ${data[i].hp}%`, 210, 14);
+                ctx.fillRect(210, 15, 100, 10)    
+                ctx.fillStyle = 'yellow';
+                ctx.fillText('C L I P', 350, 14);
+                
+                //renders bullets in red clip
+                ctx.fillStyle = 'yellow';
                 for(var ii = 0; ii < data[i].clip; ii++) {
-                    ctx.fillRect(redclipx[ii], 700, 10, 40)
+                    ctx.fillRect(redclipx[ii], 15, 20, 10)
                 }
 
-                 //renders elements
+                 //renders what element red is on
                  ctx.fillStyle = 'yellow';
                  switch(data[i].element) {
                      case 'fire':
-                         ctx.fillRect(190, 690, 60, 60);
+                         ctx.fillRect(615, 2.5, 30, 25);
                          break;
                      case 'water':
-                            ctx.fillRect(290, 690, 60, 60);
+                            ctx.fillRect(645, 2.5, 30, 25);
                          break;
                      case 'earth':
-                            ctx.fillRect(390, 690, 60, 60);
+                            ctx.fillRect(675, 2.5, 30, 25);
                          break;
                      case 'air':
-                            ctx.fillRect(490, 690, 60, 60);
+                            ctx.fillRect(705, 2.5, 30, 25);
                          break;
                  }
-                ctx.fillStyle = 'red';
-                ctx.fillRect(200, 700, 40, 40)
-                ctx.fillStyle = 'blue';
-                ctx.fillRect(300, 700, 40, 40)
-                ctx.fillStyle = 'brown';
-                ctx.fillRect(400, 700, 40, 40)
-                ctx.fillStyle = 'whitesmoke';
-                ctx.fillRect(500, 700, 40, 40)
 
-                //renders walls
+                //renders red elements
+                ctx.font = '20px Roboto';
+                ctx.fillStyle = 'red';
+                ctx.fillRect(620, 5, 20, 20);    
+                ctx.fillStyle = 'blue';
+                ctx.fillRect(650, 5, 20, 20);    
+                ctx.fillStyle = 'brown';
+                ctx.fillRect(680, 5, 20, 20);
+                ctx.fillStyle = 'whitesmoke';
+                ctx.fillRect(710, 5, 20, 20);
+
+                //renders red walls
                 ctx.fillStyle = data[i].wallc;
                 ctx.fillRect(data[i].wallx, data[i].wally, 10, 70);
 
-                //renders parry ready state
+                //renders red parry ready state
+                ctx.font = '14px Roboto';
                 if(data[i].wallReady) {
-                    ctx.fillStyle = 'yellow';
-                    ctx.font = 'Arial';
-                    ctx.fillText('Sheild UP', 575, 727)
+                    ctx.fillStyle = 'cyan';
+                    ctx.fillText('PARRY READY', 490, 14);
+                    ctx.fillRect(490, 15, 100, 10);    
                 } else {
                     ctx.fillStyle = 'red';
-                    ctx.font = 'Arial';
-                    ctx.fillText('Sheild ↓', 575, 727)
+                    ctx.fillText('PARRY DOWN', 490, 14);
+                    ctx.fillRect(490, 15, 100, 10);    
                 }
 
             }
+
+            //BLUE RENDER STUFF
             if(data[i].c === 'blue') {
+
+                //RENDERS NAME
+                ctx.font = '20px Roboto';
+                ctx.fillText(data[i].name, 775, 22.5)
+
+                //RENDERS BLUE HP BAR AND CLIP
+                ctx.fillStyle = 'red';
+                ctx.font = '14px Arial';
+                ctx.fillText(`HEALTH   ${data[i].hp}%`, 975, 14);
+                ctx.fillRect(975, 15, 100, 10)    
+                ctx.fillStyle = 'yellow';
+                ctx.fillText('C L I P', 1125, 14);
+
+                //RENDERS BULLETS IN BLUE CLIP
                 for(var iii = 0; iii < data[i].clip; iii++) {
-                    ctx.fillRect(blueclipx[iii], 700, 10, 40)
+                    ctx.fillRect(blueclipx[iii], 15, 20, 10)
                 }
-                 //renders elements
+                 //RENDERS WHICH ELEMENT BLUE IS ON
                  ctx.fillStyle = 'yellow';
                  switch(data[i].element) {
                      case 'fire':
-                         ctx.fillRect(1000, 690, 60, 60);
+                         ctx.fillRect(1370, 2.5, 30, 25);
                          break;
                      case 'water':
-                            ctx.fillRect(1100, 690, 60, 60);
+                            ctx.fillRect(1400, 2.5, 30, 25);
                          break;
                      case 'earth':
-                            ctx.fillRect(1200, 690, 60, 60);
+                            ctx.fillRect(1430, 2.5, 30, 25);
                          break;
                      case 'air':
-                            ctx.fillRect(1300, 690, 60, 60);
+                            ctx.fillRect(1460, 2.5, 30, 25);
                          break;
                  }
+                 //renders blue elements                
                 ctx.fillStyle = 'red';
-                ctx.fillRect(1010, 700, 40, 40)
+                ctx.fillRect(1375, 5, 20, 20);    
                 ctx.fillStyle = 'blue';
-                ctx.fillRect(1110, 700, 40, 40)
+                ctx.fillRect(1405, 5, 20, 20);    
                 ctx.fillStyle = 'brown';
-                ctx.fillRect(1210, 700, 40, 40)
+                ctx.fillRect(1435, 5, 20, 20);
                 ctx.fillStyle = 'whitesmoke';
-                ctx.fillRect(1310, 700, 40, 40)
+                ctx.fillRect(1465, 5, 20, 20);
 
                 //renders walls
                 ctx.fillStyle = data[i].wallc;
@@ -163,17 +196,16 @@ socket.on('render', function (data) {
 
                 //renders wall ready state
                 if(data[i].wallReady) {                    
-                    ctx.fillStyle = 'yellow';
-                    ctx.font = 'Arial';
-                    ctx.fillText('Sheild UP', 1360, 727)
+                    ctx.fillStyle = 'cyan';
+                    ctx.fillText('PARRY READY', 1250, 14);
+                    ctx.fillRect(1250, 15, 100, 10);
                 } else {
                     ctx.fillStyle = 'red';
-                    ctx.font = 'Arial';
-                    ctx.fillText('Sheild ↓', 1360, 727)
+                    ctx.fillText('PARRY DOWN', 1250, 14);
+                    ctx.fillRect(1250, 15, 100, 10);
                 }
 
             }
-
             for (var j = 0; j < data[i].bullet.length; j++) {
                 var x = data[i].bullet[j].x;
                 var y = data[i].bullet[j].y;
@@ -182,12 +214,7 @@ socket.on('render', function (data) {
                 var c = data[i].bullet[j].c;
                 ctx.fillStyle = c;
                 ctx.fillRect(x, y, w, h)
-
-
             }
-            ctx.font = '30px Arial';
-            ctx.fillStyle = 'white';
-            ctx.fillText(`${data[i].hp}%`, data[i].hpnx, data[i].hpny)
         }
     }
 })

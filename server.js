@@ -17,7 +17,6 @@ serv.listen(PORT, function() {
 
 var io = require('socket.io')(serv, {});
 
-
 var sessions = {};
 var players = {};
 
@@ -39,8 +38,6 @@ function Player(x, y, w, h, c, speed, id) {
     this.right = false;
     this.speed = speed;
     this.hp = 100;
-    this.hpx = 0;
-    this.hpy = 0;
     this.target = {
         x: 0,
         y: 0,
@@ -507,7 +504,6 @@ function Player(x, y, w, h, c, speed, id) {
     };
 }
 
-
 function Bullet(x, y, w, h, c, id, speed, level) {
     this.x = x;
     this.y = y;
@@ -521,6 +517,7 @@ function Bullet(x, y, w, h, c, id, speed, level) {
         // this.speed = 15;
     }
 }
+
 function rebound(player, type) {
     switch(type) {
         case 'bigFire':
@@ -565,7 +562,6 @@ function rebound(player, type) {
     }
 }
 
-
 var count = 0;
 io.sockets.on('connection', function(socket) { 
     count = 0; 
@@ -576,22 +572,12 @@ io.sockets.on('connection', function(socket) {
         playerOne: {
             create: function() {
                 var player = new Player(250, 250, 50, 50, 'red', 5.65464654, socket.id)
-                player.hpx = 0;
-                player.hpy = 0;
-                player.hpw = 750;
-                player.hpnx = 350;
-                player.hpny = 25
                 players[socket.id] = player;
             }
         },
         playerTwo: {
             create: function() {
                 var player = new Player(850, 250, 50, 50, 'blue', 5.65464654, socket.id)
-                player.hpx = 760;
-                player.hpy = 0;
-                player.hpw = 750;
-                player.hpnx = 1150;
-                player.hpny = 25;
                 players[socket.id] = player;
             
             }
@@ -599,16 +585,29 @@ io.sockets.on('connection', function(socket) {
         playerInQueue: {
             create: function() {
                 var player = new Player(-2000, -2000, 50, 50, 'yellow', 5.65464654, socket.id)
-                player.hpx = -110;
-                player.hpy = -100;
-                player.hp = -100;
                 players[socket.id] = player;
             },
         } 
     }
 
-    
+    socket.on('setName', function(data) {
+        console.log(data.yourName);
+        for(var i in players) {
+                if(players[i].c === 'red') {
+                    players[i].name = data.yourName;
+                    return;
+                } else if(players[i].c === 'blue') {
+                    players[i].name = data.yourName;
+                    return;
+                } else if(players[i].c === 'yellow') {
+                    players[i].name = data.yourName;
+                    return;
+                }
+            }
+    })
+
     socket.on('join', function() {  
+        
         
         //keeps track of amount players 1, 2, and in queue
         for(var i in players) {
@@ -803,6 +802,7 @@ io.sockets.on('connection', function(socket) {
         }
     })
 })
+
 //sends things to render to client
 setInterval(function() {
     var count = 0;

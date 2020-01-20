@@ -1,119 +1,80 @@
 body {
-    background: black;
+    overflow: hidden;
+    background: rgb(121,9,9);
+    background: linear-gradient(90deg, rgba(121,9,9,1) 22%, rgba(0,212,255,1) 100%);
 }
-
 canvas {
-    padding: 10px;
-    padding-top: 25px;
-    position: fixed;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin: auto;
     display: none;
-    top: 0px;
-    left: 0%;
-    width: 100%;
-    height: 100%;
+    width: 90%;
     border: 1px solid white;
-    background: rgba(36, 33, 33, 0.514);
+    background: rgb(29, 29, 29);
 }
-
-
-#menu {
+#bottom-area {
+    width: 90%;
+    margin: auto;
     display: none;
-    position: fixed;
-    background: rgba(0, 0, 0, 0.651);
-    top: 0px;
-    left: 0px;
-    z-index: 3;
-    width: 100%;
-    height: 100%;
+    justify-content: space-between;
+}
+#stats {
+    display: none;
+    width: 90%;
+    margin: auto;
+    justify-content: space-between;
     text-align: center;
     color: white;
-    font-size: 50px;
 }
-
-#closeMenu {
+#msgInput, #sendBtn {
+    padding: 10px;
+    margin-top: 10px;
+}
+#sendBtn {
+    margin-left: -5px;
+    border-radius: 0px 10px 10px 0px;
+}
+#sendBtn:focus {
+    outline: none;
+    border: none;
+}
+#msgInput {
+    width: 500px;
+    border-radius: 5px 0px 0px 5px
+}
+#leaveBtn {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    margin: 1px;
+}
+#closeControls {
+    float: right;
+    margin-bottom: 5px;
+}
+#controlsMenu {
     position: fixed;
     top: 0px;
-    right: 0px;
-    background: red;
-    font-family: arial;
-    width: 50px;
-    height: 50px;
-}
-
-#closeMenu:hover {
-    cursor: pointer;
-    background: rgb(131, 1, 1);
-}
-
-.menu-subtext {
-    font-size: 30px;
-    text-align: left;
-    color: lime;
-}
-
-#quitBtn {
+    left: 50%;
+    margin-left: -575px;
     display: none;
 }
-
-#playBtn2:hover, #quitBtn:hover {
-    cursor: pointer !important;
+th, td {
+    border: 1px solid lightgrey;
 }
-
-#playBtn2:hover {    
-    background: rgba(255, 0, 0, 0.397) !important;
-    text-decoration: none;
+.reaction {
+    font-size: 40px;
 }
-
-
-#playBtn, #playBtn2 {
-    font-size: 35px; 
-    background: rgba(255, 0, 0, 0.664); 
-    color: whitesmoke !important; 
-    border-radius: 10px 10px 10px 10px; 
-    padding: 12px;
-    text-decoration: none;
-}
-
-.ele-btn:hover {
+.reaction:hover {
     cursor: pointer;
 }
-
-#inGameNav {
-    display: none;
-}
-
-#settings:hover {
-    cursor: pointer;
-}
-
-#settings:hover, #settings1:hover, #settingsClose:hover {
-    cursor: pointer;
-}
-
-#settingsMenu {
-    display: none;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.726);
-    z-index: 20;
-}
-
-#settingsContainer {
-    width: 80%;
-    height: 80%;
+.navbar {
+    width: 90%;
+    margin: 0px;
+    padding: 0px;
     margin: auto;
-    background: rgba(0, 0, 0, 0.623);
-}
- 
-.settings-list {
-    font-size: 30px;
-}
-
-.nav-content-disabled {
-    color: grey !important;
-}
-.nav-content-disabled:hover {
-    cursor: default;
-    text-decoration: none !important;
+    height: 50px;
+    color: white;
+    display: none;
+    justify-content: space-between;    
 }

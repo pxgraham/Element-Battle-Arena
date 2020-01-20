@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=0.25, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="/public/styles/element.css">
         <link rel="stylesheet" href="/public/styles/main.css">
@@ -12,55 +13,69 @@
         <title>Sleysin | Element</title>
     </head>
 
-    <body> 
-        <div id="settingsMenu">
-            <div id="settingsContainer" class="container">
-                <div class="row">
-                    <div class="col-sm" style="display: flex; justify-content: space-between;">
-                        <span class="navbar-brand nav-content" style="font-size: 25px; margin-top: 20px;"><button id="settingsClose" style="background: none; color: red; border: none;">Close</button></span>                 
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm text-left">
-                            <ul class="list-group settings-list" style="color: red; font-family: Shadows Into Light Two, cursive;">
-                                    <li class="list-group-item" style="background: black;">Move using the arrow keys</li>
-                                    <li class="list-group-item" style="background: black;">Shoot using the F key</li>
-                                    <li class="list-group-item" style="background: black;">Change elements by using the Q, W, E, and R keys</li>
-                                    <li class="list-group-item" style="background: black;">Press the D key to Parry</li>
-                                    <li class="list-group-item" style="background: black;">Deflecting an element will stack whatever element your weilding onto the attack. For example, fire + fire = extra fire. fire + earth = meteor. etc.</li>
-                                  </ul>
-                    </div>
-                </div>
+    <body>
+        <div id="navbar" class="navbar">
+            <span id="playingAs" class="navtext">Waiting for opponent...</span>
+            <div>
+                <button id="showControls" class="btn btn-success">Controls</button class="btn-danger">
+                <button id="leaveGame" class="btn btn-danger">Surrender</button>
             </div>
         </div>
-        <div id="mainMenu" class="container">
-            <div class="row">
-                <div class="col-sm" style="display: flex; justify-content: space-between;">
-                    <a class="navbar-brand" href="/" style="font-size: 25px; margin-top: 20px;">Sleysin</a>
-                    <a class="navbar-brand nav-content" href="/element" style="font-size: 45px; margin-top: 20px;">Element</a>
-                    <span id="settings" class="navbar-brand nav-content" style="font-size: 25px; margin-top: 20px;">Controls</span>                    
-                    <!-- <span id="quitBtn" class="navbar-brand nav-content">Leave</span> -->
-                </div>
-            </div>
-            <div class="row" style="margin-top: 30px;">
-                <div class="col-sm text-center">
-                    <p id="playBtn2" class="navbar-brand nav-content">Play <i class="fas fa-angle-double-right"></i></p>
-                    <p id="playBtn1" class="navbar-brand nav-content" style="display: none;">Play <i class="fas fa-angle-double-right"></i></p>
-                </div>
-            </div>
-        </div>
-        <div id="inGameNav" class="container">
-            <div class="row">
-                <div class="col-sm" style="display: flex; justify-content: space-between;">
-                    <a class="navbar-brand" href="/" style="font-size: 12.5px; margin-top: 0px;">Sleysin</a>
-                    <a class="navbar-brand nav-content" href="/element" style="font-size: 20px; margin-top: 0px;">Element</a>
-                    <span id="settings1" class="navbar-brand nav-content" style="font-size: 12.5px; margin-top: 0px;">Controls</span>
-                    <!-- <span id="quitBtn" class="navbar-brand nav-content">Leave</span> -->
-                </div>
-            </div>
-        </div>  
 
-        <canvas id="canvas" width="1500px" height="750px"></canvas>
+        <div id="mainMenu" class="container">
+            <div class="jumbotron bg-dark text-light" style="margin-top: 200px;">
+                <h1 class="display-4 text-center text-silt">Element Beta (v0.5)</h1>
+                <p class="lead text-center">
+                    <input id="name" class="btn" placeholder="Name" maxlength="11"/>
+                    <br />
+                    <br />
+                    <button id="playBtn" class="btn btn-success text-center mr-5">Find Match</button>
+                    <button id="showControls" class="btn btn-primary text-center">Controls</button>
+                    <br />
+                    <br />
+                    <a href="https://peighten.com" style="font-size: 13.5px; margin-bottom: 0px;">Designed by Peigten</a>
+                </p>
+              </div>
+        </div>
+
+        <div id="controlsMenu" class="container text-light border border-secondary">
+            <div class="row">
+                <div class="col">
+                    <button id="closeControls" class="btn btn-danger">Close</button>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                  <tr class="text-center">
+                    <th class="bg-primary" scope="col">Move</th>
+                    <th class="bg-primary" scope="col">Shoot</th>
+                    <th class="bg-primary" scope="col">Change Weapon</th>
+                    <th class="bg-primary" scope="col">Deflect</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th class="bg-secondary" scope="row">Arrow Keys</th>
+                    <td class="bg-secondary">F</td class="bg-primary">
+                    <td class="bg-secondary">Q, W, E, R</td class="bg-primary">
+                    <td class="bg-secondary">D</td class="bg-primary">
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+
+        <canvas id="canvas" width="1500px" height="675px"></canvas>
+        <div id="bottom-area">            
+            <span class="reaction">😂</span> 
+            <span class="reaction">😤</span class="reaction"> 
+            <span class="reaction">😭</span class="reaction"> 
+            <span class="reaction">👏🏿</span class="reaction"> 
+
+            <div>
+                <input id="msgInput" placeholder="press enter to start typing"/>
+                <button id="sendBtn" class="btn-primary">Send</button class="btn-danger">
+            </div>
+        </div>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="/public/scripts/script.js"></script>
     </body>
