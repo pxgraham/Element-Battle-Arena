@@ -1,4 +1,4 @@
-#### Welcome to Element Battle Arena.
+#### Welcome to Element Battle Arena - an elemental online 1v1 battle
 
 #### To run locally:
 
