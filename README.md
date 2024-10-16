@@ -1,32 +1,27 @@
-Welcome to Element.
+#### Welcome to Element Battle Arena.
 
-This site is hosted at Sleysin.com
+#### To run locally:
 
+Start the game by running `node server.js` in the project directory, and open [http://localhost:3000](http://localhost:3000) in a browser
 
 Here are some guidelines:
 
-    Move using the Arrow Keys,
-    Q, W, E and R switch what element your using.
+Move using the `Arrow Keys`
+Switch elements using `QWER`
 
-    D is used to Parry.
-    F is used to Shoot your element.
+`D` is used to `Parry`.
+`F` is used to shoot your element.
 
-    You need to parry right before a shot hits you to deflect it back.
+You need to `Parry` right before a shot hits you to deflect it back.
 
-COMBOS:
-    Fire+fire = big fire.
-    earth+earth = big earth etc....
-
-    fire + earth = meteor
-    fire + air = lightning
-    earth + water = plant
-    water + air = ice
-
+Combos:
+fire + earth = meteor
+fire + air = lightning
+earth + water = plant
+water + air = ice
 
 Counters:
-    fire + water
-    earth + air
+fire + water
+earth + air
 
-
-
-Made using express, socket.io, love and determination
+![Game image1](./public/images/show1.png)
